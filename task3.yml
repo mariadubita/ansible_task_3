@@ -1,0 +1,23 @@
+- name: Configure CentOS VMs
+  hosts: all
+  become: true
+  tasks:
+    - name: Update /etc/hosts file
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ hostvars[item].ansible_host }} {{ item }}"
+      loop: "{{ groups['centos'] }}"
+
+    - name: Update /etc/resolv.conf file
+      copy:
+        content: |
+          nameserver 8.8.8.8
+          nameserver 8.8.4.4
+        dest: /etc/resolv.conf
+
+    - name: Update /etc/chrony.conf file
+      copy:
+        content: |
+          server time1.google.com iburst
+          server time2.google.com iburst
+        dest: /etc/chrony.conf

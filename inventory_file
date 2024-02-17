@@ -1,0 +1,10 @@
+[web]
+Ubuntu ansible_host=159.65.245.176
+CentOS7 ansible_host=167.71.174.61
+
+[centos]
+centos1 ansible_host=45.55.71.21
+centos2 ansible_host=159.65.252.236
+centos3 ansible_host=157.245.4.221
+centos4 ansible_host=159.65.45.93
+centos5 ansible_host=164.90.133.180
