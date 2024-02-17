@@ -1,0 +1,43 @@
+- name: Configure CentOS VMs
+  hosts: all
+  become: true
+  vars:
+    vms:
+      - name: centos1
+        ip: 45.55.71.21
+      - name: centos2
+        ip: 159.65.252.236
+      - name: centos3
+        ip: 157.245.4.221
+      - name: centos4
+        ip: 159.65.45.93
+      - name: centos5
+        ip: 164.90.133.180
+    resolv_nameservers:
+      - 8.8.8.8
+      - 8.8.4.4
+    ntp_servers:
+      - time1.google.com
+      - time2.google.com
+  tasks:
+    - name: Update /etc/hosts file
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ item.ip }} {{ item.name }}"
+      with_items: "{{ vms }}"
+
+    - name: Update /etc/resolv.conf file
+      blockinfile:
+        path: /etc/resolv.conf
+        block: |
+          {% for ns in resolv_nameservers %}
+          nameserver {{ ns }}
+          {% endfor %}
+
+    - name: Update /etc/chrony.conf file
+      blockinfile:
+        path: /etc/chrony.conf
+        block: |
+          {% for server in ntp_servers %}
+          server {{ server }} iburst
+          {% endfor %}
