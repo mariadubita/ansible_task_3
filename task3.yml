@@ -8,12 +8,17 @@
         line: "{{ hostvars[item].ansible_host }} {{ item }}"
       loop: "{{ groups['centos'] }}"
 
-    - name: Update /etc/resolv.conf file
-      copy:
-        content: |
-          nameserver 8.8.8.8
-          nameserver 8.8.4.4
+    - name: Update cat /etc/resolv.conf 
+    file
+      lineinfile:
+        path: /etc/resolv.conf
+        line: "{{ item }}"
+        src: resolv.conf.j2
         dest: /etc/resolv.conf
+        backup: yes
+      with_items:
+        - "nameserver 8.8.8.8"
+        - "nameserver 8.8.4.4"
 
     - name: Update /etc/chrony.conf file
       copy:
